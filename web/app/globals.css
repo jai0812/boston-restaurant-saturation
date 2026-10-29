@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body { height: 100%; }
+body {
+  background: radial-gradient(1200px 600px at 20% -10%, #1a1d2e 0%, #0a0b0f 60%);
+  color: #e8eaf0;
+  font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+}
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+  border: 1px solid #232634;
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+.metric { font-feature-settings: "tnum" 1; }

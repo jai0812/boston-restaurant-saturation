@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+.DS_Store
+
+# Node / Next.js
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel
+
+# Model artifacts and logs
+*.joblib
+*.log
+
+# Editor
+.idea/
+.vscode/

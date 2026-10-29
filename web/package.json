@@ -1,0 +1,29 @@
+{
+  "name": "boston-saturation-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "maplibre-gl": "^4.5.0",
+    "react-map-gl": "^7.1.7",
+    "recharts": "^2.12.7",
+    "swr": "^2.2.5",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.3",
+    "typescript": "^5.5.3",
+    "tailwindcss": "^3.4.6",
+    "postcss": "^8.4.39",
+    "autoprefixer": "^10.4.19"
+  }
+}
