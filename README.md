@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🍽️ Boston Restaurant Saturation
+# Boston Restaurant Saturation
 
 ### A full-stack geospatial ML system that tells you **how many restaurants a Boston neighborhood should carry** — and whether a new one will survive.
 
@@ -15,7 +15,7 @@
 
 ---
 
-## 🧠 The thesis
+## The thesis
 
 A restaurant market has a **carrying capacity**. Exceed it and the whole ecosystem rots:
 
@@ -28,7 +28,7 @@ This project **measures that capacity for every one of Boston's 681 census block
 
 ---
 
-## 📺 Live product
+## Live product
 
 <p align="center">
   <img src="docs/dashboard_whatif.jpg" alt="What-if simulator" width="48%"/>
@@ -40,7 +40,7 @@ This project **measures that capacity for every one of Boston's 681 census block
 
 ---
 
-## 🏛️ System architecture
+## System architecture
 
 ```mermaid
 flowchart LR
@@ -102,7 +102,7 @@ flowchart LR
 
 ---
 
-## 🔬 Model architecture
+## Model architecture
 
 Three stacked models, each solving a different question.
 
@@ -148,7 +148,7 @@ flowchart TB
 
 ---
 
-## 🔁 Request lifecycle — the "What-if" simulator
+## Request lifecycle — the "What-if" simulator
 
 What happens when you drop a pin + cuisine in the dashboard:
 
@@ -180,7 +180,7 @@ sequenceDiagram
 
 ---
 
-## 📊 Results (on real Boston data)
+## Results (on real Boston data)
 
 ### Risk-flag breakdown — 680 block groups
 ![risk breakdown](docs/risk_breakdown.png)
@@ -207,7 +207,7 @@ Coffee shops, pizza, donuts and Chinese dominate the raw OSM tags. The recommend
 
 ---
 
-## 🚀 Quickstart
+## Quickstart
 
 ### Prerequisites
 - Python 3.11+
@@ -247,7 +247,7 @@ python scripts/generate_docs_charts.py
 
 ---
 
-## 🔌 REST API
+## REST API
 
 Once `uvicorn app.api:app` is running on `:8000`:
 
@@ -279,7 +279,7 @@ curl -X POST http://127.0.0.1:8000/whatif \
 
 ---
 
-## 📂 Project layout
+## Project layout
 
 ```
 boston-restaurant-saturation/
@@ -317,7 +317,7 @@ boston-restaurant-saturation/
 
 ---
 
-## 🧮 Data sources
+## Data sources
 
 | Source | Why | Access |
 |---|---|---|
@@ -329,7 +329,7 @@ boston-restaurant-saturation/
 
 ---
 
-## 🧭 Roadmap
+## Roadmap
 
 - [x] Capacity, cuisine, and survival models
 - [x] FastAPI service
@@ -348,13 +348,13 @@ PRs welcome.
 
 ---
 
-## 📄 License
+## License
 
 MIT — see [LICENSE](LICENSE).
 
 ---
 
-## 🙏 Credits
+## Credits
 
 Built by **[Jai Sharma](https://github.com/jai0812)**.
 Data courtesy of the US Census Bureau, City of Boston, OpenStreetMap contributors, and the LEHD program.
