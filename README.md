@@ -44,40 +44,40 @@ This project **measures that capacity for every one of Boston's 681 census block
 
 ```mermaid
 flowchart LR
-    subgraph SRC[🌐 Data sources]
-        A1[US Census ACS<br/>demographics]
-        A2[OpenStreetMap<br/>restaurant POIs]
-        A3[data.boston.gov<br/>food inspections]
-        A4[LEHD LODES<br/>workplace jobs]
-        A5[TIGER/Line<br/>block-group shapes]
+    subgraph SRC["Data sources"]
+        A1["US Census ACS<br/>demographics"]
+        A2["OpenStreetMap<br/>restaurant POIs"]
+        A3["data.boston.gov<br/>food inspections"]
+        A4["LEHD LODES<br/>workplace jobs"]
+        A5["TIGER Line<br/>block-group shapes"]
     end
 
-    subgraph INGEST[🔄 Ingest layer — src/scrapers]
-        B1[census_api.py]
-        B2[osm_restaurants.py]
-        B3[boston_data.py]
-        B4[lodes.py]
-        B5[yelp_scraper.py<br/>Selenium fallback]
+    subgraph INGEST["Ingest layer - src/scrapers"]
+        B1["census_api.py"]
+        B2["osm_restaurants.py"]
+        B3["boston_data.py"]
+        B4["lodes.py"]
+        B5["yelp_scraper.py<br/>Selenium fallback"]
     end
 
-    subgraph FEATS[🧮 Feature pipeline — src/features]
-        C1[violations.py<br/>hygiene risk per BG]
-        C2[build.py<br/>geo-join + aggregation]
+    subgraph FEATS["Feature pipeline - src/features"]
+        C1["violations.py<br/>hygiene risk per BG"]
+        C2["build.py<br/>geo-join and aggregation"]
     end
 
-    subgraph MODELS[🤖 Models — src/model]
-        D1[Capacity regressor<br/>LightGBM]
-        D2[Cuisine recommender<br/>kNN]
-        D3[Survival classifier<br/>LightGBM]
+    subgraph MODELS["Models - src/model"]
+        D1["Capacity regressor<br/>LightGBM"]
+        D2["Cuisine recommender<br/>kNN"]
+        D3["Survival classifier<br/>LightGBM"]
     end
 
-    subgraph SERVE[⚡ Serving layer]
-        E1[FastAPI<br/>app/api.py]
+    subgraph SERVE["Serving layer"]
+        E1["FastAPI<br/>app/api.py"]
     end
 
-    subgraph UI[🖥️ User interfaces]
-        F1[Streamlit<br/>app/dashboard.py]
-        F2[Next.js 14<br/>web/]
+    subgraph UI["User interfaces"]
+        F1["Streamlit<br/>app/dashboard.py"]
+        F2["Next.js 14<br/>web/"]
     end
 
     A1 --> B1
@@ -108,27 +108,27 @@ Three stacked models, each solving a different question.
 
 ```mermaid
 flowchart TB
-    FEAT[📦 Feature table<br/>681 BGs × 37 cols<br/>demographics + daytime pop + hygiene]
+    FEAT["Feature table<br/>681 BGs x 37 cols<br/>demographics + daytime pop + hygiene"]
 
-    subgraph CAP[1️⃣ Capacity model]
-        CAP1[Filter → <i>healthy</i> BGs<br/>low violation + fail rate]
-        CAP2[LightGBM regressor<br/>→ restaurants_per_1000]
-        CAP3[±1σ residual band<br/>→ recommended_min / max]
+    subgraph CAP["1 - Capacity model"]
+        CAP1["Filter to healthy BGs<br/>low violation + fail rate"]
+        CAP2["LightGBM regressor<br/>predicts restaurants_per_1000"]
+        CAP3["Plus or minus 1 sigma residual band<br/>recommended_min and max"]
     end
 
-    subgraph CUI[2️⃣ Cuisine recommender]
-        CUI1[kNN in demographic space<br/>over healthy BGs]
-        CUI2[Mean cuisine distribution<br/>of neighbors]
-        CUI3[Subtract local actual mix<br/>→ underserved cuisines]
+    subgraph CUI["2 - Cuisine recommender"]
+        CUI1["kNN in demographic space<br/>over healthy BGs"]
+        CUI2["Mean cuisine distribution<br/>of neighbors"]
+        CUI3["Subtract local actual mix<br/>underserved cuisines"]
     end
 
-    subgraph SURV[3️⃣ Survival classifier]
-        SURV1[Build business lifecycles<br/>from inspection first/last]
-        SURV2[Label survived_24mo]
-        SURV3[LightGBM binary classifier<br/>→ P(alive @ 24 mo)]
+    subgraph SURV["3 - Survival classifier"]
+        SURV1["Build business lifecycles<br/>from inspection first and last dates"]
+        SURV2["Label survived_24mo"]
+        SURV3["LightGBM binary classifier<br/>P alive at 24 months"]
     end
 
-    OUT[🎯 Per-BG output<br/>recommended_min / max<br/>saturation_index<br/>risk_flag<br/>cuisine_mix<br/>survival_proba]
+    OUT["Per-BG output<br/>recommended_min and max<br/>saturation_index<br/>risk_flag<br/>cuisine_mix<br/>survival_proba"]
 
     FEAT --> CAP
     FEAT --> CUI
@@ -155,27 +155,27 @@ What happens when you drop a pin + cuisine in the dashboard:
 ```mermaid
 sequenceDiagram
     autonumber
-    participant U as User (dashboard)
-    participant W as Next.js / Streamlit
-    participant A as FastAPI /whatif
+    participant U as User dashboard
+    participant W as Next.js or Streamlit
+    participant A as FastAPI whatif
     participant F as Feature table
     participant S as Survival model
     participant C as Cuisine recs
     participant O as OSM POIs
 
-    U->>W: Click "Run what-if"
-    W->>A: POST /whatif {lat, lon, cuisine}
-    A->>F: nearest block group for (lat, lon)
+    U->>W: Click Run what-if
+    W->>A: POST whatif with lat lon cuisine
+    A->>F: nearest block group for lat lon
     A->>F: lookup features for that BG
-    A->>A: project saturation_after = (count+1) / recommended_mid
-    A->>S: predict_proba(X with sat_after)
-    S-->>A: P(survived_24mo)
+    A->>A: project saturation after new opening
+    A->>S: predict_proba with saturation after
+    S-->>A: P survived 24mo
     A->>C: look up cuisine gap for this BG
     C-->>A: gap for the chosen cuisine
-    A->>O: haversine → count restaurants within 500 m
+    A->>O: haversine count restaurants within 500 m
     O-->>A: cannibalization_count
-    A-->>W: {verdict, survival, sat_Δ, cuisine_fit, cannibalized}
-    W-->>U: Colored banner + 4 metric tiles
+    A-->>W: verdict survival sat delta cuisine_fit cannibalized
+    W-->>U: Colored banner and 4 metric tiles
 ```
 
 ---
